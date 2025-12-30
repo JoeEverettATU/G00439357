@@ -1,0 +1,61 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Recipe Details</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ng-container *ngIf="isLoading; else detailsTemplate">
+    <p>Loading recipe...</p>
+  </ng-container>
+
+  <ng-template #detailsTemplate>
+    <ng-container *ngIf="recipe; else noRecipe">
+      <!-- Recipe image -->
+      <div class="ion-text-center ion-margin-bottom">
+        <img
+          [src]="recipe.image"
+          [alt]="recipe.title"
+          style="max-width: 100%; border-radius: 8px;"
+        />
+      </div>
+
+      <!-- Title -->
+      <h2 class="ion-margin-bottom">{{ recipe.title }}</h2>
+
+      <!-- Ingredients header -->
+      <h3>Ingredients (Metric)</h3>
+
+      <ion-list>
+        <ion-item *ngFor="let ing of recipe.extendedIngredients">
+          <ion-label>
+            {{ ing.original }}  
+            <br />
+            {{ ing.measures?.metric?.amount }} {{ ing.measures?.metric?.unitLong }}
+          </ion-label>
+        </ion-item>
+      </ion-list>
+
+      <!-- Instructions header -->
+      <h3 class="ion-margin-top">Instructions</h3>
+
+      <ion-list>
+        <ion-item *ngFor="let step of recipe.analyzedInstructions[0]?.steps">
+          <ion-label>
+            <strong>Step {{ step.number }}</strong>
+            <p>{{ step.step }}</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+
+      <!-- Favourites button -->
+      <ion-button expand="block" class="ion-margin-top" (click)="toggleFavourite()">
+        {{ isFavourite ? 'Remove From Favourites' : 'Add to Favourites' }}
+      </ion-button>
+    </ng-container>
+
+    <ng-template #noRecipe>
+      <p>Recipe could not be loaded.</p>
+    </ng-template>
+  </ng-template>
+</ion-content>
