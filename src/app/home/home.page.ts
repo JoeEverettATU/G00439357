@@ -1,28 +1,62 @@
 import { Component } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
+// Standalone Ionic components
+import {
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent,
+  IonButtons,
+  IonButton,
+  IonItem,
+  IonLabel,
+  IonInput,
+  IonList,
+  IonThumbnail,
+} from '@ionic/angular/standalone';
+
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
-  imports: [IonicModule, CommonModule, FormsModule],
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonButtons,
+    IonButton,
+    IonItem,
+    IonLabel,
+    IonInput,
+    IonList,
+    IonThumbnail,
+  ],
 })
 export class HomePage {
+  // Two-way bound to the input
   ingredientsInput: string = '';
+
+  // List of recipes returned from API
   recipes: any[] = [];
 
+  // Spoonacular API key
   private apiKey = '70759a4f7911402abcc53d3c51d3b759';
 
   constructor(private http: HttpClient, private router: Router) {}
 
+  // Called when user clicks "Search"
   searchRecipes() {
     const query = this.ingredientsInput.trim();
     if (!query) {
-      // No ingredients entered; do nothing for now
+      // Nothing typed, do nothing for now
       return;
     }
 
@@ -32,6 +66,7 @@ export class HomePage {
 
     this.http.get<any>(url).subscribe({
       next: (response) => {
+        // response.results is an array of recipes
         this.recipes = response.results || [];
         console.log('Recipes:', this.recipes);
       },
@@ -42,9 +77,9 @@ export class HomePage {
     });
   }
 
+  // We'll wire routing later; for now just log
   openDetails(id: number) {
-    // We'll create the actual details page later
-    this.router.navigate(['/details', id]);
+    console.log('Would open details for recipe id:', id);
+    // Later: this.router.navigate(['/details', id]);
   }
 }
-
