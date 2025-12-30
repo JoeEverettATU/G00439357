@@ -19,5 +19,36 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <!-- Will fill this with search UI next -->
+
+  <!-- Search input -->
+  <ion-item>
+    <ion-label position="stacked">Ingredients</ion-label>
+    <ion-input
+      [(ngModel)]="ingredientsInput"
+      placeholder="e.g. chicken, rice, tomato">
+    </ion-input>
+  </ion-item>
+
+  <!-- Search button -->
+  <ion-button expand="block" class="ion-margin-top" (click)="searchRecipes()">
+    Search
+  </ion-button>
+
+  <!-- Results list -->
+  <ion-list *ngIf="recipes.length > 0" class="ion-margin-top">
+    <ion-item *ngFor="let recipe of recipes">
+      <ion-thumbnail slot="start">
+        <img [src]="recipe.image" alt="{{ recipe.title }}" />
+      </ion-thumbnail>
+
+      <ion-label>
+        {{ recipe.title }}
+      </ion-label>
+
+      <ion-button slot="end" fill="outline" (click)="openDetails(recipe.id)">
+        Details
+      </ion-button>
+    </ion-item>
+  </ion-list>
+
 </ion-content>
