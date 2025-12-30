@@ -76,10 +76,9 @@ export class HomePage {
       },
     });
   }
-
-  // We'll wire routing later; for now just log
   openDetails(id: number) {
-    console.log('Would open details for recipe id:', id);
-    // Later: this.router.navigate(['/details', id]);
-  }
+  console.log('Navigating to details for recipe id:', id);
+  this.router.navigate(['/details', id]);
+}
+
 }
