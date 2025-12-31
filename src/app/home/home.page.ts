@@ -76,8 +76,15 @@ export class HomePage {
       },
     });
   }
+
+
+
 goToFavourites() {
   this.router.navigate(['/favourites']);
+}
+
+goToSettings() {
+  this.router.navigate(['/settings']);
 }
 
   openDetails(id: number) {
