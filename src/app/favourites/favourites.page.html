@@ -1,13 +1,33 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>favourites</ion-title>
+    <ion-title>Favourites</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">favourites</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding">
+
+  <ng-container *ngIf="favourites.length === 0">
+    <p>You have no favourite recipes yet.</p>
+  </ng-container>
+
+  <ion-list *ngIf="favourites.length > 0">
+    <ion-item *ngFor="let recipe of favourites">
+      <ion-thumbnail slot="start">
+        <img [src]="recipe.image" alt="{{ recipe.title }}" />
+      </ion-thumbnail>
+
+      <ion-label>
+        {{ recipe.title }}
+      </ion-label>
+
+      <ion-button slot="end" fill="outline" (click)="openDetails(recipe.id)">
+        Details
+      </ion-button>
+
+      <ion-button slot="end" color="danger" (click)="remove(recipe.id)">
+        Remove
+      </ion-button>
+    </ion-item>
+  </ion-list>
+
 </ion-content>
