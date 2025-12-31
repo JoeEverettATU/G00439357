@@ -76,6 +76,10 @@ export class HomePage {
       },
     });
   }
+goToFavourites() {
+  this.router.navigate(['/favourites']);
+}
+
   openDetails(id: number) {
   console.log('Navigating to details for recipe id:', id);
   this.router.navigate(['/details', id]);
