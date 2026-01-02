@@ -52,30 +52,49 @@ export class HomePage {
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  // Called when user clicks "Search"
-  searchRecipes() {
-    const query = this.ingredientsInput.trim();
-    if (!query) {
-      // Nothing typed, do nothing for now
-      return;
-    }
+  // Innovation 1: Loading indicator state.
+// This boolean controls whether the UI should show a spinner while the Spoonacular API call is in progress.
+// When true: show <ion-spinner> and hide results.
+// When false: show results OR show a "no results" message.
+isLoading = false;
+//Called when the user clicks Search
+searchRecipes() {
+  // Trim whitespace so the user can't submit just spaces.
+  const query = this.ingredientsInput.trim();
+  if (!query) return;
 
-    const url = `https://api.spoonacular.com/recipes/complexSearch?query=${encodeURIComponent(
-      query
-    )}&apiKey=${this.apiKey}`;
+  //Innovation 1: Set loading true BEFORE the HTTP request begins.
+  // This gives immediate user feedback that the app is working (prevents "frozen app" feeling).
+  this.isLoading = true;
 
-    this.http.get<any>(url).subscribe({
-      next: (response) => {
-        // response.results is an array of recipes
-        this.recipes = response.results || [];
-        console.log('Recipes:', this.recipes);
-      },
-      error: (error) => {
-        console.error('Error fetching recipes', error);
-        this.recipes = [];
-      },
-    });
-  }
+  // Clear existing recipes so the UI doesn't show stale results while loading new ones.
+  this.recipes = [];
+
+  const url = `https://api.spoonacular.com/recipes/complexSearch?query=${encodeURIComponent(
+    query
+  )}&apiKey=${this.apiKey}`;
+
+  // Angular HttpClient returns an Observable. The request is sent when we subscribe.
+  this.http.get<any>(url).subscribe({
+    next: (response) => {
+      // Spoonacular returns results in response.results
+      this.recipes = response.results || [];
+
+      //Innovation 1: Loading finished successfully → hide spinner.
+      this.isLoading = false;
+    },
+    error: (error) => {
+      console.error('Error fetching recipes', error);
+
+      // Ensure UI is consistent in error case.
+      this.recipes = [];
+
+      // ✅ Innovation 1: Loading finished with error → hide spinner.
+      this.isLoading = false;
+    },
+  });
+}
+
 
 
 

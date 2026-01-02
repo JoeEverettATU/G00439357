@@ -36,6 +36,30 @@
     Search
   </ion-button>
 
+  <!--Innovation 1: Loading spinner.
+     Displays while isLoading is true (while we wait for Spoonacular response).
+     Helps users understand the app is working. -->
+<div class="ion-text-center ion-margin-top" *ngIf="isLoading">
+  <ion-spinner></ion-spinner>
+  <p>Loading recipes...</p>
+</div>
+
+<!-- Innovation 1: "No results" feedback.
+     Shows only when:
+     - not loading,
+     - user typed something,
+     - and the API returned zero recipes. -->
+<p *ngIf="!isLoading && recipes.length === 0 && ingredientsInput.trim()">
+  No recipes found for "{{ ingredientsInput }}".
+</p>
+
+<!-- Results list should only show when NOT loading -->
+<ion-list *ngIf="!isLoading && recipes.length > 0" class="ion-margin-top">
+  <!-- existing list markup -->
+</ion-list>
+
+
+
   <!-- Results list -->
   <ion-list *ngIf="recipes.length > 0" class="ion-margin-top">
     <ion-item *ngFor="let recipe of recipes">

@@ -4,10 +4,15 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <ng-container *ngIf="isLoading; else detailsTemplate">
+<!-- ✅ Innovation 1: Details loading state.
+     Shows spinner until full recipe information has been retrieved from Spoonacular. -->
+<ng-container *ngIf="isLoading; else detailsTemplate">
+  <div class="ion-text-center ion-margin-top">
+    <ion-spinner></ion-spinner>
     <p>Loading recipe...</p>
-  </ng-container>
+  </div>
+</ng-container>
+
 
   <ng-template #detailsTemplate>
     <ng-container *ngIf="recipe; else noRecipe">
