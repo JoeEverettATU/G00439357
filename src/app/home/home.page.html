@@ -67,13 +67,26 @@
         <img [src]="recipe.image" alt="{{ recipe.title }}" />
       </ion-thumbnail>
 
-      <ion-label>
+            <ion-label>
         {{ recipe.title }}
       </ion-label>
+
+      <!-- Innovation 2: Favourite quick-toggle button in search results.
+     If the recipe is already a favourite, show a filled heart.
+     If not, show an outline heart.
+     Clicking toggles favourite status instantly. -->
+      <ion-button
+        slot="end"
+        aria-label="Toggle favourite"
+        (click)="toggleFavourite(recipe)">
+        <span *ngIf="isFavourite(recipe.id)" aria-hidden="true">❤️</span>
+        <span *ngIf="!isFavourite(recipe.id)" aria-hidden="true">🤍</span>
+      </ion-button>
 
       <ion-button slot="end" fill="outline" (click)="openDetails(recipe.id)">
         Details
       </ion-button>
+
     </ion-item>
   </ion-list>
 

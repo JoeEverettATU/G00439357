@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { FavouritesService } from '../services/favourites.service';
 
 // Standalone Ionic components
 import {
@@ -17,6 +18,7 @@ import {
   IonInput,
   IonList,
   IonThumbnail,
+  IonSpinner,
 } from '@ionic/angular/standalone';
 
 @Component({
@@ -38,6 +40,7 @@ import {
     IonInput,
     IonList,
     IonThumbnail,
+    IonSpinner,
   ],
 })
 export class HomePage {
@@ -50,7 +53,7 @@ export class HomePage {
   // Spoonacular API key
   private apiKey = '70759a4f7911402abcc53d3c51d3b759';
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router, private favouritesService: FavouritesService) {}
 
   // Innovation 1: Loading indicator state.
 // This boolean controls whether the UI should show a spinner while the Spoonacular API call is in progress.
@@ -110,5 +113,26 @@ goToSettings() {
   console.log('Navigating to details for recipe id:', id);
   this.router.navigate(['/details', id]);
 }
+
+// Innovation 2: Show favourite status in search results and allow quick toggle.
+// Uses the same shared FavouritesService as the Details/Favourites pages,
+// so favourites stay consistent across the whole app and persist in localStorage.
+
+isFavourite(id: number): boolean {
+  // Returns true if the recipe ID exists in the stored favourites list.
+  return this.favouritesService.isFavourite(id);
+}
+
+toggleFavourite(recipe: any) {
+   // Adds/removes the recipe directly from the Home results list
+  // without needing to open the Recipe Details page.
+  if (this.isFavourite(recipe.id)) {
+    this.favouritesService.removeFavourite(recipe.id);
+  } else {
+    // We store the recipe object so Favourites page can display title/image immediately.
+    this.favouritesService.addFavourite(recipe);
+  }
+}
+
 
 }
