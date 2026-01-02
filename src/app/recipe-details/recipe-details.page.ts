@@ -18,6 +18,8 @@ import {
 
 import { FavouritesService } from '../services/favourites.service';
 
+import { SettingsService, MeasurementUnit } from '../services/settings';
+
 @Component({
   selector: 'app-recipe-details',
   templateUrl: './recipe-details.page.html',
@@ -39,15 +41,21 @@ export class RecipeDetailsPage {
   recipe: any = null;
   isLoading = true;
   isFavourite = false;
+  measurementUnit: MeasurementUnit = 'metric';
+  measurementUnitLabel: string = 'Metric';
 
   private apiKey = '70759a4f7911402abcc53d3c51d3b759';
 
-  constructor(
+    constructor(
     private route: ActivatedRoute,
     private http: HttpClient,
-    private favouritesService: FavouritesService
+    private favouritesService: FavouritesService,
+    private settingsService: SettingsService
   ) {
-    // When the page is created, get the id from the URL and load the recipe
+    this.measurementUnit = this.settingsService.getMeasurementUnit();
+    this.measurementUnitLabel =
+      this.measurementUnit === 'us' ? 'US' : 'Metric';
+
     this.route.paramMap.subscribe((params) => {
       const idParam = params.get('id');
       const id = idParam ? Number(idParam) : null;
@@ -77,6 +85,17 @@ export class RecipeDetailsPage {
         this.isLoading = false;
       },
     });
+  }
+  getIngredientAmount(ing: any): number | null {
+    if (!ing || !ing.measures) return null;
+    const measures = this.measurementUnit === 'us' ? ing.measures.us : ing.measures.metric;
+    return measures?.amount ?? null;
+  }
+
+  getIngredientUnit(ing: any): string {
+    if (!ing || !ing.measures) return '';
+    const measures = this.measurementUnit === 'us' ? ing.measures.us : ing.measures.metric;
+    return measures?.unitLong ?? '';
   }
 
   toggleFavourite() {

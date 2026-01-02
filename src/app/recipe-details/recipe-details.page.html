@@ -23,18 +23,20 @@
       <!-- Title -->
       <h2 class="ion-margin-bottom">{{ recipe.title }}</h2>
 
-      <!-- Ingredients header -->
-      <h3>Ingredients (Metric)</h3>
+            <!-- Ingredients header -->
+      <h3>Ingredients ({{ measurementUnitLabel }})</h3>
 
       <ion-list>
         <ion-item *ngFor="let ing of recipe.extendedIngredients">
           <ion-label>
             {{ ing.original }}  
             <br />
-            {{ ing.measures?.metric?.amount }} {{ ing.measures?.metric?.unitLong }}
+            {{ getIngredientAmount(ing) }} {{ getIngredientUnit(ing) }}
           </ion-label>
         </ion-item>
       </ion-list>
+
+
 
       <!-- Instructions header -->
       <h3 class="ion-margin-top">Instructions</h3>
